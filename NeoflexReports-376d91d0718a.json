@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "neoflexreports",
+  "private_key_id": "376d91d0718ac5da756f6c455292cd2a02bd4635",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDOL4uEjzeASd1G\nnCXZfb3dwYmfiJOpOC2mzo0GkCjXzFehI1MQqOgQX1AHjwZ7QkpvYu5xjeVRVL9e\nWijrgX4ZZbcbg83Pjyo0GFgiXMy/QyQTM0NOxNc1tZyOMJZ8EClXODkWcxKfIVNK\no6lMR3ayPUP8AQ+kK86+BVAL+PdGuHp0xSdFfRTeJCRtLMyeBRTaxGoE0E4PXgsU\nk4l8EcGLG4mCcNE0BzMFgHPYe+L/FQ6KbFW6Rcz8YbY9jc1d2jgQaoGENe7an44e\nxGBNe0D9iLBVQYmv8vlIVnFVcsB1YPT9HYdnBwpUFVYckUCxSfNzxNkuHJ9Y7z/S\nXOjStkJXAgMBAAECggEAP9ue2NfoZx25YBiVamZUyx0ZbCUHIpZJIUwAhoNYevmJ\nPFlt7Q97DDMQ3L5x0fQGjLf1xIqfdtCKEoVW/hWVgfUsQGPSdtHOzuKpTT8zlJsN\nTbsHQhqZ0sMkMS+gM91niGFb4PWT02AlZU0J7puFig+Kgj6r4vtEZTrM/2BE6YxD\nv/bBHToDaujv/Y0FfAllzQpdLltTZUl/y+YlEZsdaXVzcZrvWzyvCpA/52roIcez\ngx6XOrqA7BzctNMxyrnRdnQS149a0tXNMhEWyW83A+NbO9C4ouZi+gnWgazeN78N\nTAITWKkG0+es8t7RbEmLAvOJAUlpWnrJaaNgPTw88QKBgQDwWJM+bgNAdVy4lxgz\n4puz21XulFnMZzKqf2RMcq5nJiRhJSW5jAbTHiaEr6h1ElwLpytfFxY3x8TFi60f\nwmx6NqqY1sOmIB1cp7uR+W979bYp/e7J9Wv2hCiEM4Q/JeTDNBDBAL4WCP/Rq0yZ\nai2otbgPj8BhdyVyL3uhaV4acQKBgQDbnWVvvN5SzI0XFmJz09ZGvVP0ncqw5Sus\nMGMVAhISg/SxdD/ZVHgWglQlQhp/5R6Zs9+/wCdR33Af1mxdfoanrk5JVLWfhLCe\nebx1bfiBPnRdjOuPr75WLEpsZdApOvyRs6rNxL2jUPlX1pFJ9rNdn4o8vY1DqogZ\nsjtgilA9RwKBgQCgrycp+tTzuEMYKfQFZEAim8Y0rjvm+yuVb3v33EgbMBXsWLCC\n/0nkxWiNFv8x3edp5waJGV9CRa2ZQMuqywpJHtkpO5QsMZZPxtgRPMk6/8gdBOcr\nYIgglLSdxe9pZIUvuFRnJH7xLm0RmUup2aHTBEKdLMc6ojSHxZULEe3XEQKBgEBE\n2ImRoRJkECogf+Fbrgp3n5knkEiiWFyEsIpWV8mZWkOQPJsyUA5uR4e7x5uEBqd+\nb01jQ15/YAXBL2dQ/sEVjo2BP8GWCEXoZFGNRDs2dsFl2w3qpW38ei8swHVAcOeG\nx8Z9++1OZhnhjhUyIB2W8dKCulOCFWBHu36uG3tDAoGBAN0BqLTHhQoOpx7fJanO\nf4H7CEa407MvE270Oyu8f4LKcqu9zdcU8HhS1HLrYLrqKyszFbImuZhzzyCdxCeZ\nJjiqwAEC1M7ea+sSW+NJn3uIyLgzhc8M41xAQ28oONtVBTp2Li1fwWRy01VWl1qA\n3UwnBvf3oEhb3Py8PnkUT0pU\n-----END PRIVATE KEY-----\n",
+  "client_email": "skrobotan@neoflexreports.iam.gserviceaccount.com",
+  "client_id": "111521671051141639285",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/skrobotan%40neoflexreports.iam.gserviceaccount.com"
+}
