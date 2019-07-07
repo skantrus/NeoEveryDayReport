@@ -1,21 +1,26 @@
 import pandas as pn, openpyxl, datetime
 from dateutil import parser
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+import os
 import supporting_scripts
 
+# supporting_scripts.clear_current_report(current_dir,'Report.xlsx') # Our every day report   line 14
+# OSReport = 'Отчет по ОС (ВТБ. Управление заявками ИТ).xls'  # Filename of Every day Report line 23
+# OSExpired = pn.read_html(current_dir + 'Просрочки (ВТБ. Управление заявками ИТ).xls')[1]  # 1st imported file from Bank Jira   line 145
+# Report.save(current_dir + 'testt.xlsx')  # Save report to file xxx   line 225
 
 def main():
-    os_control,omni_list,alm_list=import_from_google_tables_oscontrol()
-    write_data_to_osreport(os_control,omni_list,alm_list)
+    current_dir='E:\\_proj\\Neoflex\\_everyday\\'##Path to files
+
+    supporting_scripts.clear_current_report(current_dir,'Report.xlsx')#current_dir+filename or 'E:\\_proj\\Neoflex\\_everyday\\Report.xlsx'
+    os_control,omni_list,alm_list=supporting_scripts.import_from_google_tables_oscontrol()
+    write_data_to_osreport(current_dir, os_control, omni_list, alm_list)
 
 
-
-def write_data_to_osreport(os_control,omni_list,alm_list):
+def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
 
     def Count1():
         """Function to write data into a OSReport.Count1"""
-        OSReport = pn.read_html('E:\\_proj\\Neoflex\\_everyday\\OSReport.xls')[1]  # pandas.core.frame.DataFrame
+        OSReport = pn.read_html(current_dir+'Отчет по ОС (ВТБ. Управление заявками ИТ).xls')[1]  # pandas.core.frame.DataFrame
         OSReport = list(OSReport.get_values())  # to list
 
         Counting1=Report['Подсчет1']
@@ -121,16 +126,18 @@ def write_data_to_osreport(os_control,omni_list,alm_list):
 
 
 
-    supporting_scripts.clear_current_report()
-    Report = openpyxl.load_workbook('E:\\_proj\\Neoflex\\_everyday\\Report.xlsx')  # Our Everyday Report
 
-    Count1()
-    table_for_count2(os_control)
-    omni(omni_list)
-    table_for_cont_alm(alm_list)
+    Report = openpyxl.load_workbook(current_dir+'Report.xlsx')  # Our Everyday Report
 
-    ##Expired Oses
-    OSExpired = pn.read_html('E:\\_proj\\Neoflex\\_everyday\\Просрочки (ВТБ. Управление заявками ИТ) (3).xls')[1]
+    Count1()#put data into Report.Count1
+    table_for_count2(os_control)#..
+    omni(omni_list)#..
+    table_for_cont_alm(alm_list)#put data into Report.table_for_cont_alm
+
+    ##Start of input Expired OSes##
+
+    ##Expired Oses in 'Просрочки (ВТБ. Управление заявками ИТ)'
+    OSExpired = pn.read_html(current_dir+'Просрочки (ВТБ. Управление заявками ИТ).xls')[1]
     OSExpired = list(OSExpired.get_values())
     oses_expired_probably_new_set = set()
     oses_expired_probably_new=dict()
@@ -206,93 +213,13 @@ def write_data_to_osreport(os_control,omni_list,alm_list):
                 continue
             except KeyError:
                 break
-
     try:
         print('В отчёт добавлены новые OS в просрочке\nНеобходимо проверить дату,выставить резолюцию по просрочке и причину\n\n') if flag else print()
     except Exception:
         print('Новые просрочки отсутствуют\n\n')
-    Report.save('E:\\_proj\\Neoflex\\_everyday\\testt.xlsx')  # E:\\_proj\\Neoflex\\_everyday\\Report.xlsx
+    Report.save(current_dir+'testt.xlsx')  # E:\\_proj\\Neoflex\\_everyday\\Report.xlsx
+    ##End of input Expired OSes##
 
-def import_from_google_tables_oscontrol():
-    """Get Data from Google Tables"""
-    omni_key,omni_sheet_name = '1drbPbjMKGbODn1FGqmR0VdRzh3zyaxGVjq1prTAu2rs','2019'
-    oscontrol_key,oscontrol_sheet_name='1HiDdPqB_-ro4Iu0RplDnt3k8lEjDd_UiOBPKvyWOPuY','Сводная таблица по OS'
-    almcontrol_key,almcontrol_sheet_name='1SDSEhgtQTHR9a69BfYE1Fd2DnMH6fIFBEsvyHldwmM8','Сводная таблица по ALM'####for test '13criem2KpgGtQA3fjv2BxH3f3-r3WWi5TJqod4bAQfg','Лист1'
-
-    # use creds to create a client to interact with the Google Drive API
-    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('NeoflexReports-376d91d0718a.json', scope)
-    client = gspread.authorize(creds)
-    curdate = parser.parse('2019-07-04').date()  ##should be =datetime.datetime.now().date()
-
-    oscontrol_sheet = client.open_by_key(oscontrol_key).worksheet(oscontrol_sheet_name).get_all_values()  ##Should be *.worksheet('OSCONTROL')
-    oscontrol_list = []  # list with OS with all filled cells
-    for i in range(len(oscontrol_sheet), 0, -1):
-        if oscontrol_sheet[i - 1][0] != '' and oscontrol_sheet[i - 1][1] != '' and oscontrol_sheet[i - 1][2] != '' and oscontrol_sheet[i - 1][11] != '':
-            ##Currenct day from 00:00 to 23:59
-            try:
-                if parser.parse(oscontrol_sheet[i - 1][2], dayfirst=True).date() == curdate:
-                    flag1 = 1
-                    oscontrol_list.append(oscontrol_sheet[i - 1][0:12])
-                else:
-                    continue
-            except Exception as e:
-                print(str(e),oscontrol_sheet[i - 1],i)
-                continue
-        else:
-            try:
-                if flag1:  # if flag exist - we went through current date
-                    break
-                else:
-                    continue  # if flag does not exist - we still dont get current date - WE ARE IN THE FUTURE!
-            except UnboundLocalError:
-                continue
-
-    omni_sheet = client.open_by_key(omni_key).worksheet(omni_sheet_name).get_all_values()
-    omni_list=[]
-    for i in range(len(omni_sheet), 0, -1):
-        if omni_sheet[i - 1][5] != '' and omni_sheet[i - 1][0] != '' and omni_sheet[i - 1][1] != '' and omni_sheet[i - 1][2] != '':
-            try:
-                if parser.parse(omni_sheet[i - 1][5], dayfirst=True).date() == curdate:  ##should be ==curdate
-                    flag2 = 1
-                    omni_list.append(omni_sheet[i - 1][0:2]+omni_sheet[i - 1][3:6]+omni_sheet[i - 1][7:])
-            except Exception as e:
-                print(str(e),omni_sheet[i - 1],i)
-                continue
-        else:
-            try:
-                if flag2:  # if flag exist - we went through current date
-                    break
-                else:
-                    continue  # if flag does not exist - we still dont get current date - WE ARE IN THE FUTURE!
-            except UnboundLocalError:
-                continue
-
-    alm_sheet= client.open_by_key(almcontrol_key).worksheet(almcontrol_sheet_name).get_all_values()
-    alm_list=[]
-    for i in range(len(alm_sheet), 0, -1):
-        if alm_sheet[i - 1][0] != '' and alm_sheet[i - 1][1] != '' and alm_sheet[i - 1][2] != '' and alm_sheet[i - 1][11] != '':
-            ##Currenct day from 00:00 to 23:59
-            try:
-                if parser.parse(alm_sheet[i - 1][2], dayfirst=True).date() == curdate:
-                    flag3 = 1
-                    alm_list.append(alm_sheet[i - 1][0:12])
-                else:
-                    continue
-            except Exception as e:
-                print(str(e),alm_sheet[i - 1],i)
-                continue
-        else:
-            try:
-                if flag3:  # if flag exist - we went through current date
-                    break
-                else:
-                    continue  # if flag does not exist - we still dont get current date - WE ARE IN THE FUTURE!
-            except UnboundLocalError:
-                continue
-
-
-    return oscontrol_list,omni_list,alm_list
 
 if __name__ == '__main__':
     main()
