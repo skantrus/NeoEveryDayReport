@@ -9,18 +9,22 @@ import supporting_scripts
 # Report.save(current_dir + 'testt.xlsx')  # Save report to file xxx   line 225
 
 def main():
-    current_dir='E:\\_proj\\Neoflex\\_everyday\\'##Path to files
+    current_dir='E:\работа\_отчёты\_ежедневный\\'##Path to files
 
-    supporting_scripts.clear_current_report(current_dir,'Report.xlsx')#current_dir+filename or 'E:\\_proj\\Neoflex\\_everyday\\Report.xlsx'
-    os_control,omni_list,alm_list=supporting_scripts.import_from_google_tables_oscontrol()
+    supporting_scripts.clear_current_report(current_dir,'Отчет по OS.xlsx')#current_dir+filename or 'E:\\_proj\\eoflex\\_everyday\\Report.xlsx'
+
+    curdate=parser.parse('2019-07-08').date()
+    os_control,omni_list,alm_list=supporting_scripts.import_from_google_tables_oscontrol(curdate)
     write_data_to_osreport(current_dir, os_control, omni_list, alm_list)
 
+    input()
 
+    
 def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
 
     def Count1():
         """Function to write data into a OSReport.Count1"""
-        OSReport = pn.read_html(current_dir+'Отчет по ОС (ВТБ. Управление заявками ИТ).xls')[1]  # pandas.core.frame.DataFrame
+        OSReport = pn.read_html(current_dir+'Отчет по OS (ВТБ. Управление заявками ИТ).xls')[1]  # pandas.core.frame.DataFrame
         OSReport = list(OSReport.get_values())  # to list
 
         Counting1=Report['Подсчет1']
@@ -102,21 +106,21 @@ def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
                 continue
 
     def return_correct_system(value):
-        if value in 'УСБС-Middle-СЗП: Неофлекс':
+        if value == 'УСБС-Middle-СЗП: Неофлекс':
             return 'УСБС-Middle-СЗП'
-        elif value in 'УСБС-Front: Неофлекс':
+        elif value == 'УСБС-Front: Неофлекс':
             return 'УСБС-Фронт'
-        elif value in 'УСБС-Middle: Гарантированная поддержка' or value in 'УСБС-Middle: Неофлекс':
+        elif value == 'УСБС-Middle: Гарантированная поддержка' or value == 'УСБС-Middle: Неофлекс':
             return 'УСБС-Middle'
-        elif value in 'PLM':
+        elif value == 'PLM':
             return 'PLM'
-        elif value in 'MDS-ULBS':
+        elif value == 'MDS-ULBS':
             return 'MDS-Фронт'
-        elif value in 'Not bound':
+        elif value == 'Not bound':
             return 'MDS-Middle'
-        elif value in 'TS 2.0: Неофлекс':
+        elif value == 'TS 2.0: Неофлекс':
             return 'TC2.0'
-        elif value in 'Not bound':
+        elif value == 'Not bound':
             return 'KK'
         else:
             return ''
@@ -127,7 +131,7 @@ def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
 
 
 
-    Report = openpyxl.load_workbook(current_dir+'Report.xlsx')  # Our Everyday Report
+    Report = openpyxl.load_workbook(current_dir+'Отчет по OS.xlsx')  # Our Everyday Report
 
     Count1()#put data into Report.Count1
     table_for_count2(os_control)#..
@@ -137,7 +141,7 @@ def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
     ##Start of input Expired OSes##
 
     ##Expired Oses in 'Просрочки (ВТБ. Управление заявками ИТ)'
-    OSExpired = pn.read_html(current_dir+'Просрочки (ВТБ. Управление заявками ИТ).xls')[1]
+    OSExpired = pn.read_html(current_dir+'Просрочки_1 (ВТБ. Управление заявками ИТ).xls')[1]
     OSExpired = list(OSExpired.get_values())
     oses_expired_probably_new_set = set()
     oses_expired_probably_new=dict()
@@ -217,7 +221,7 @@ def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
         print('В отчёт добавлены новые OS в просрочке\nНеобходимо проверить дату,выставить резолюцию по просрочке и причину\n\n') if flag else print()
     except Exception:
         print('Новые просрочки отсутствуют\n\n')
-    Report.save(current_dir+'testt.xlsx')  # E:\\_proj\\Neoflex\\_everyday\\Report.xlsx
+    Report.save(current_dir+'Отчет по OS new.xlsx')
     ##End of input Expired OSes##
 
 

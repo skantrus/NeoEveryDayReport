@@ -66,7 +66,7 @@ def clear_current_report(current_dir,filename):
     Report.save(current_dir+filename)  # E:\\_proj\\Neoflex\\_everyday\\Report.xlsx
 
 
-def import_from_google_tables_oscontrol():
+def import_from_google_tables_oscontrol(curdate):
     """Import Data from Google Tables"""
     omni_key,omni_sheet_name = '1drbPbjMKGbODn1FGqmR0VdRzh3zyaxGVjq1prTAu2rs','2019'
     oscontrol_key,oscontrol_sheet_name='1HiDdPqB_-ro4Iu0RplDnt3k8lEjDd_UiOBPKvyWOPuY','Сводная таблица по OS'
@@ -76,8 +76,7 @@ def import_from_google_tables_oscontrol():
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     creds = ServiceAccountCredentials.from_json_keyfile_name('NeoflexReports-376d91d0718a.json', scope)
     client = gspread.authorize(creds)
-    curdate = parser.parse('2019-07-04').date()  ##should be =datetime.datetime.now().date()
-
+    
     oscontrol_sheet = client.open_by_key(oscontrol_key).worksheet(oscontrol_sheet_name).get_all_values()  ##Should be *.worksheet('OSCONTROL')
     oscontrol_list = []  # list with OS with all filled cells
     for i in range(len(oscontrol_sheet), 0, -1):
@@ -85,9 +84,10 @@ def import_from_google_tables_oscontrol():
             ##Currenct day from 00:00 to 23:59
             try:
                 if parser.parse(oscontrol_sheet[i - 1][2], dayfirst=True).date() == curdate:
-                    flag1 = 1
+                    #flag1 = 1
                     oscontrol_list.append(oscontrol_sheet[i - 1][0:12])
                 else:
+                    flag1 = 1
                     continue
             except Exception as e:
                 print(str(e),oscontrol_sheet[i - 1],i)
@@ -107,10 +107,11 @@ def import_from_google_tables_oscontrol():
         if omni_sheet[i - 1][5] != '' and omni_sheet[i - 1][0] != '' and omni_sheet[i - 1][1] != '' and omni_sheet[i - 1][2] != '':
             try:
                 if parser.parse(omni_sheet[i - 1][5], dayfirst=True).date() == curdate:  ##should be ==curdate
-                    flag2 = 1
+                    #flag2 = 1
                     omni_list.append(omni_sheet[i - 1][0:2]+omni_sheet[i - 1][3:6]+omni_sheet[i - 1][7:])
             except Exception as e:
                 print(str(e),omni_sheet[i - 1],i)
+                flag2 = 1
                 continue
         else:
             try:
@@ -124,25 +125,17 @@ def import_from_google_tables_oscontrol():
     alm_sheet= client.open_by_key(almcontrol_key).worksheet(almcontrol_sheet_name).get_all_values()
     alm_list=[]
     for i in range(len(alm_sheet), 0, -1):
-        if alm_sheet[i - 1][0] != '' and alm_sheet[i - 1][1] != '' and alm_sheet[i - 1][2] != '' and alm_sheet[i - 1][11] != '':
-            ##Currenct day from 00:00 to 23:59
-            try:
-                if parser.parse(alm_sheet[i - 1][2], dayfirst=True).date() == curdate:
-                    flag3 = 1
+        try:
+            if parser.parse(alm_sheet[i - 1][2], dayfirst=True).date() == curdate:
+                if alm_sheet[i - 1][0] != '' and alm_sheet[i - 1][1] != '' and alm_sheet[i - 1][2] != '' and alm_sheet[i - 1][11] != '':
                     alm_list.append(alm_sheet[i - 1][0:12])
                 else:
                     continue
-            except Exception as e:
-                print(str(e),alm_sheet[i - 1],i)
-                continue
-        else:
-            try:
-                if flag3:  # if flag exist - we went through current date
-                    break
-                else:
-                    continue  # if flag does not exist - we still dont get current date - WE ARE IN THE FUTURE!
-            except UnboundLocalError:
-                continue
+            else:
+                break	
+        except Exception as e:
+            print(str(e),alm_sheet[i - 1],i)
+            continue
 
 
     return oscontrol_list,omni_list,alm_list
