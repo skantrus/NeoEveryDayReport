@@ -104,6 +104,21 @@ def import_from_google_tables_oscontrol(curdate):
     omni_sheet = client.open_by_key(omni_key).worksheet(omni_sheet_name).get_all_values()
     omni_list=[]
     for i in range(len(omni_sheet), 0, -1):
+        try:
+            if parser.parse(omni_sheet[i - 1][5], dayfirst=True).date() == curdate:
+                flag2 = 1
+                if omni_sheet[i - 1][5] != '' and omni_sheet[i - 1][0] != '' and omni_sheet[i - 1][1] != '' and omni_sheet[i - 1][2] != '':
+                    omni_list.append(omni_sheet[i - 1][0:2]+omni_sheet[i - 1][3:6]+omni_sheet[i - 1][7:])
+                else:
+                    try:
+                        if flag2:
+                            break
+                    except Exception as e:
+                        continue   
+        except Exception as e:
+            print(str(e),omni_sheet[i - 1],i)
+            continue       
+                    
         if omni_sheet[i - 1][5] != '' and omni_sheet[i - 1][0] != '' and omni_sheet[i - 1][1] != '' and omni_sheet[i - 1][2] != '':
             try:
                 if parser.parse(omni_sheet[i - 1][5], dayfirst=True).date() == curdate:  ##should be ==curdate
