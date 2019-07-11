@@ -80,26 +80,23 @@ def import_from_google_tables_oscontrol(curdate):
     oscontrol_sheet = client.open_by_key(oscontrol_key).worksheet(oscontrol_sheet_name).get_all_values()  ##Should be *.worksheet('OSCONTROL')
     oscontrol_list = []  # list with OS with all filled cells
     for i in range(len(oscontrol_sheet), 0, -1):
-        if oscontrol_sheet[i - 1][0] != '' and oscontrol_sheet[i - 1][1] != '' and oscontrol_sheet[i - 1][2] != '' and oscontrol_sheet[i - 1][11] != '':
-            ##Currenct day from 00:00 to 23:59
-            try:
-                if parser.parse(oscontrol_sheet[i - 1][2], dayfirst=True).date() == curdate:
-                    #flag1 = 1
+        try:
+            if parser.parse(oscontrol_sheet[i - 1][2], dayfirst=True).date() == curdate:
+                flag1 = 1
+                if oscontrol_sheet[i - 1][0] != '' and oscontrol_sheet[i - 1][1] != '' and oscontrol_sheet[i - 1][2] != '' and oscontrol_sheet[i - 1][11] != '':
                     oscontrol_list.append(oscontrol_sheet[i - 1][0:12])
                 else:
-                    flag1 = 1
                     continue
-            except Exception as e:
-                print(str(e),oscontrol_sheet[i - 1],i)
-                continue
-        else:
-            try:
-                if flag1:  # if flag exist - we went through current date
-                    break
-                else:
-                    continue  # if flag does not exist - we still dont get current date - WE ARE IN THE FUTURE!
-            except UnboundLocalError:
-                continue
+            else:
+                try:
+                    if flag1:
+                        break
+                except Exception as e:
+                    continue     
+        except Exception as e:
+            print(str(e),oscontrol_sheet[i - 1],i)
+            continue 
+
 
     omni_sheet = client.open_by_key(omni_key).worksheet(omni_sheet_name).get_all_values()
     omni_list=[]
