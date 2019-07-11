@@ -13,7 +13,7 @@ def main():
 
     supporting_scripts.clear_current_report(current_dir,'Отчет по OS.xlsx')#current_dir+filename or 'E:\\_proj\\eoflex\\_everyday\\Report.xlsx'
 
-    curdate=parser.parse('2019-07-08').date()
+    curdate=parser.parse('2019-07-09').date()
     os_control,omni_list,alm_list=supporting_scripts.import_from_google_tables_oscontrol(curdate)
     write_data_to_osreport(current_dir, os_control, omni_list, alm_list)
 

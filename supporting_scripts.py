@@ -127,12 +127,17 @@ def import_from_google_tables_oscontrol(curdate):
     for i in range(len(alm_sheet), 0, -1):
         try:
             if parser.parse(alm_sheet[i - 1][2], dayfirst=True).date() == curdate:
+                flag3=1
                 if alm_sheet[i - 1][0] != '' and alm_sheet[i - 1][1] != '' and alm_sheet[i - 1][2] != '' and alm_sheet[i - 1][11] != '':
                     alm_list.append(alm_sheet[i - 1][0:12])
                 else:
                     continue
             else:
-                break	
+                try:
+                    if flag3:
+                        break
+                except Exception as e:
+                    continue          
         except Exception as e:
             print(str(e),alm_sheet[i - 1],i)
             continue
