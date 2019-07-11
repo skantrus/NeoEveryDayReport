@@ -88,8 +88,12 @@ def import_from_google_tables_oscontrol(curdate):
                 else:
                     continue
             else:
+                for x in range(2,5):
+                    if parser.parse(oscontrol_sheet[i - x][2], dayfirst=True).date() == curdate:
+                        flag1=0
+                        break
                 try:
-                    if flag1:
+                    if flag1==1:
                         break
                 except Exception as e:
                     continue     
@@ -107,11 +111,17 @@ def import_from_google_tables_oscontrol(curdate):
                 if omni_sheet[i - 1][5] != '' and omni_sheet[i - 1][0] != '' and omni_sheet[i - 1][1] != '' and omni_sheet[i - 1][2] != '':
                     omni_list.append(omni_sheet[i - 1][0:2]+omni_sheet[i - 1][3:6]+omni_sheet[i - 1][7:])
                 else:
-                    try:
-                        if flag2:
-                            break
-                    except Exception as e:
-                        continue   
+                    continue
+            else:      
+                for x in range(2,5):
+                    if parser.parse(omni_sheet[i - x][2], dayfirst=True).date() == curdate:
+                        flag2=0
+                        break
+                try:
+                    if flag2==1:
+                        break
+                except Exception as e:
+                    continue   
         except Exception as e:
             print(str(e),omni_sheet[i - 1],i)
             continue       
@@ -127,8 +137,12 @@ def import_from_google_tables_oscontrol(curdate):
                 else:
                     continue
             else:
+                for x in range(2,5):
+                    if parser.parse(alm_sheet[i - x][2], dayfirst=True).date() == curdate:
+                        flag3=0
+                        break
                 try:
-                    if flag3:
+                    if flag3==1:
                         break
                 except Exception as e:
                     continue          
