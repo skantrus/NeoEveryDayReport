@@ -118,24 +118,6 @@ def import_from_google_tables_oscontrol(curdate):
         except Exception as e:
             print(str(e),omni_sheet[i - 1],i)
             continue       
-                    
-        if omni_sheet[i - 1][5] != '' and omni_sheet[i - 1][0] != '' and omni_sheet[i - 1][1] != '' and omni_sheet[i - 1][2] != '':
-            try:
-                if parser.parse(omni_sheet[i - 1][5], dayfirst=True).date() == curdate:  ##should be ==curdate
-                    #flag2 = 1
-                    omni_list.append(omni_sheet[i - 1][0:2]+omni_sheet[i - 1][3:6]+omni_sheet[i - 1][7:])
-            except Exception as e:
-                print(str(e),omni_sheet[i - 1],i)
-                flag2 = 1
-                continue
-        else:
-            try:
-                if flag2:  # if flag exist - we went through current date
-                    break
-                else:
-                    continue  # if flag does not exist - we still dont get current date - WE ARE IN THE FUTURE!
-            except UnboundLocalError:
-                continue
 
     alm_sheet= client.open_by_key(almcontrol_key).worksheet(almcontrol_sheet_name).get_all_values()
     alm_list=[]
