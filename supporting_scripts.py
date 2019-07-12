@@ -106,7 +106,7 @@ def import_from_google_tables_oscontrol(curdate):
     omni_list=[]
     for i in range(len(omni_sheet), 0, -1):
         try:
-            if parser.parse(omni_sheet[i - 1][5], dayfirst=True).date() == curdate:
+            if parser.parse(omni_sheet[i - 1][2], dayfirst=True).date() == curdate:
                 flag2 = 1
                 if omni_sheet[i - 1][5] != '' and omni_sheet[i - 1][0] != '' and omni_sheet[i - 1][1] != '' and omni_sheet[i - 1][2] != '':
                     omni_list.append(omni_sheet[i - 1][0:2]+omni_sheet[i - 1][3:6]+omni_sheet[i - 1][7:])
