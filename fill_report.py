@@ -13,7 +13,7 @@ def main():
 
     supporting_scripts.clear_current_report(current_dir,'Отчет по OS.xlsx')#current_dir+filename or 'E:\\_proj\\eoflex\\_everyday\\Report.xlsx'
 
-    curdate=parser.parse('2019-07-09').date()
+    curdate=parser.parse('2019-07-11').date()
     os_control,omni_list,alm_list=supporting_scripts.import_from_google_tables_oscontrol(curdate)
     write_data_to_osreport(current_dir, os_control, omni_list, alm_list)
 
@@ -181,10 +181,9 @@ def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
     oses_union=oses_expired_probably_new_set.intersection(oses_expired_probably_set)
     oses_expired_probably_new_set.difference_update(oses_union)
     i=16
-    while True:
-        try:
-            new_one_os=oses_union.pop()
-            new_one_row = oses_expired_probably[new_one_os]
+##    while True:
+    for new_one_row in oses_expired_probably:
+        if new_one_row[0] in oses_union:
             for x in range(1, 8):
                 Expired.cell(row=i, column=x).value = new_one_row[x - 1]
                 Expired.cell(row=i, column=x).border.bottom.border_style = 'thin'
@@ -195,28 +194,47 @@ def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
                 Expired.cell(row=i, column=x).border.right.style = 'thin'
                 Expired.cell(row=i, column=x).border.top.border_style = 'thin'
                 Expired.cell(row=i, column=x).border.top.style = 'thin'
-            i += 1
-            continue
-        except KeyError:
-            try:
-                new_one_os=oses_expired_probably_new_set.pop()
-                new_one_row=oses_expired_probably_new[new_one_os]
-                new_one_row[2] = return_correct_system(new_one_row[2])
-                for x in range(1, 6):
-                    Expired.cell(row=i, column=x).value = new_one_row[x - 1]
-                    Expired.cell(row=i, column=x).border.bottom.border_style = 'thin'
-                    Expired.cell(row=i, column=x).border.bottom.style = 'thin'
-                    Expired.cell(row=i, column=x).border.left.border_style = 'thin'
-                    Expired.cell(row=i, column=x).border.left.style = 'thin'
-                    Expired.cell(row=i, column=x).border.right.border_style = 'thin'
-                    Expired.cell(row=i, column=x).border.right.style = 'thin'
-                    Expired.cell(row=i, column=x).border.top.border_style = 'thin'
-                    Expired.cell(row=i, column=x).border.top.style = 'thin'
-                flag=1
-                i += 1
-                continue
-            except KeyError:
-                break
+        i += 1
+##        
+##
+##
+##            
+##        try:
+##            new_one_os=oses_union.pop()
+##            new_one_row = oses_expired_probably[new_one_os]
+##            for x in range(1, 8):
+##                Expired.cell(row=i, column=x).value = new_one_row[x - 1]
+##                Expired.cell(row=i, column=x).border.bottom.border_style = 'thin'
+##                Expired.cell(row=i, column=x).border.bottom.style = 'thin'
+##                Expired.cell(row=i, column=x).border.left.border_style = 'thin'
+##                Expired.cell(row=i, column=x).border.left.style = 'thin'
+##                Expired.cell(row=i, column=x).border.right.border_style = 'thin'
+##                Expired.cell(row=i, column=x).border.right.style = 'thin'
+##                Expired.cell(row=i, column=x).border.top.border_style = 'thin'
+##                Expired.cell(row=i, column=x).border.top.style = 'thin'
+##            i += 1
+##            continue
+##        except KeyError:
+##            try:
+    while True:
+        new_one_os=oses_expired_probably_new_set.pop()
+        nne_row=oses_expired_probably_new[new_one_os]
+        new_one_row[2] = return_correct_system(new_one_row[2])
+        for x in range(1, 6):
+            Expired.cell(row=i, column=x).value = new_one_row[x - 1]
+            Expired.cell(row=i, column=x).border.bottom.border_style = 'thin'
+            Expired.cell(row=i, column=x).border.bottom.style = 'thin'
+            Expired.cell(row=i, column=x).border.left.border_style = 'thin'
+            Expired.cell(row=i, column=x).border.left.style = 'thin'
+            Expired.cell(row=i, column=x).border.right.border_style = 'thin'
+            Expired.cell(row=i, column=x).border.right.style = 'thin'
+            Expired.cell(row=i, column=x).border.top.border_style = 'thin'
+            Expired.cell(row=i, column=x).border.top.style = 'thin'
+        flag=1
+        i += 1
+    
+##    except KeyError:
+##        break
     try:
         print('В отчёт добавлены новые OS в просрочке\nНеобходимо проверить дату,выставить резолюцию по просрочке и причину\n\n') if flag else print()
     except Exception:
