@@ -7,7 +7,7 @@ import supporting_scripts
 # OSReport = 'Отчет по ОС.xls'  # Filename of Every day Report
 # OSExpired = pn.read_html(current_dir + 'Просрочки_1.xls')[1]  # 1st imported file from Bank Jira
 # Report.save(current_dir+'Отчет по OS '+parser.parse(curdate).date().strftime("%d.%m.%y")+'.xlsx')  # Save report to file xxx
-curdate = '2019-08-22'
+curdate = '2019-08-22' 
 def main():
     mycurdate = parser.parse(curdate).date()
 
