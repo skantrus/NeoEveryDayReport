@@ -7,8 +7,7 @@ from dateutil import parser
 def clear_current_report(current_dir,filename):
     """Очищает текущий Отчёт по ОС"""
 
-    Report = openpyxl.load_workbook(current_dir+filename)  # Our Everyday Report #current_dir+filename or 'E:\\_proj\\Neoflex\\_everyday\\Report.xlsx'
-
+    Report = openpyxl.load_workbook(current_dir+filename)  # Our Everyday Report
     counting1 = Report['Подсчет1']
     index=2
     while True:
@@ -98,7 +97,7 @@ def import_from_google_tables_oscontrol(curdate):
                 except Exception as e:
                     continue     
         except Exception as e:
-            print(str(e),oscontrol_sheet[i - 1],i)
+            #print(str(e),oscontrol_sheet[i - 1],i)
             continue 
 
 
@@ -123,7 +122,7 @@ def import_from_google_tables_oscontrol(curdate):
                 except Exception as e:
                     continue   
         except Exception as e:
-            print(str(e),omni_sheet[i - 1],i)
+            #print(str(e),omni_sheet[i - 1],i)
             continue       
 
     alm_sheet= client.open_by_key(almcontrol_key).worksheet(almcontrol_sheet_name).get_all_values()
@@ -147,7 +146,7 @@ def import_from_google_tables_oscontrol(curdate):
                 except Exception as e:
                     continue          
         except Exception as e:
-            print(str(e),alm_sheet[i - 1],i)
+            #print(str(e),alm_sheet[i - 1],i)
             continue
 
 
