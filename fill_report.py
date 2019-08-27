@@ -11,7 +11,7 @@ curdate = '2019-08-22'
 def main():
     mycurdate = parser.parse(curdate).date()
 
-    current_dir='E:\\_proj\\Neoflex\_everyday\\'  ##Path to files
+    current_dir='E:\\работа\\_отчёты\\_ежедневный\\'  ##Path to files
 
     supporting_scripts.clear_current_report(current_dir,filename='Отчет по OS.xlsx')
 
