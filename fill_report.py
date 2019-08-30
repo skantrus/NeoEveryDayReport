@@ -7,7 +7,7 @@ import supporting_scripts
 # OSReport = 'Отчет по ОС.xls'  # Filename of Every day Report
 # OSExpired = pn.read_html(current_dir + 'Просрочки_1.xls')[1]  # 1st imported file from Bank Jira
 # Report.save(current_dir+'Отчет по OS '+parser.parse(curdate).date().strftime("%d.%m.%y")+'.xlsx')  # Save report to file xxx
-curdate = '2019-08-22' 
+curdate = '2019-08-29' 
 def main():
     mycurdate = parser.parse(curdate).date()
 
@@ -195,6 +195,7 @@ def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
                 Expired.cell(row=i, column=x).border.right.style = 'thin'
                 Expired.cell(row=i, column=x).border.top.border_style = 'thin'
                 Expired.cell(row=i, column=x).border.top.style = 'thin'
+                Expired.cell(row=i, column=x).number_format = 'DD.MM.YY;@'
             i += 1
 ##        
 ##
@@ -234,6 +235,7 @@ def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
             Expired.cell(row=i, column=x).border.right.style = 'thin'
             Expired.cell(row=i, column=x).border.top.border_style = 'thin'
             Expired.cell(row=i, column=x).border.top.style = 'thin'
+            Expired.cell(row=i, column=x).number_format = 'DD.MM.YY;@'
         flag=1
         i += 1
 
