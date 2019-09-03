@@ -4,6 +4,7 @@ import os
 import re
 import supporting_scripts
 from shutil import copyfile
+from copy import copy
 
 # supporting_scripts.clear_current_report(current_work_dir,'Report.xlsx') # Our every day report
 # OSReport = 'Отчет по ОС.xls'  # Filename of Every day Report
@@ -229,6 +230,7 @@ def write_data_to_osreport(current_work_dir,os_control,omni_list,alm_list):
                 Expired.cell(row=i, column=x).border.top.border_style = 'thin'
                 Expired.cell(row=i, column=x).border.top.style = 'thin'
                 Expired.cell(row=i, column=x).number_format = 'DD.MM.YY;@'
+                Expired.cell(row=i, column=x).alignment = copy(Expired.cell(row=16, column=5).alignment)
             i += 1
 ##        
 ##
@@ -269,6 +271,7 @@ def write_data_to_osreport(current_work_dir,os_control,omni_list,alm_list):
             Expired.cell(row=i, column=x).border.top.border_style = 'thin'
             Expired.cell(row=i, column=x).border.top.style = 'thin'
             Expired.cell(row=i, column=x).number_format = 'DD.MM.YY;@'
+            Expired.cell(row=i, column=x).alignment = copy(Expired.cell(row=16, column=5).alignment)
         flag=1
         i += 1
 
