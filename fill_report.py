@@ -1,31 +1,58 @@
 import pandas as pn, openpyxl, datetime
 from dateutil import parser
 import os
+import re
 import supporting_scripts
+from shutil import copyfile
 
-# supporting_scripts.clear_current_report(current_dir,'Report.xlsx') # Our every day report
+# supporting_scripts.clear_current_report(current_work_dir,'Report.xlsx') # Our every day report
 # OSReport = 'Отчет по ОС.xls'  # Filename of Every day Report
-# OSExpired = pn.read_html(current_dir + 'Просрочки_1.xls')[1]  # 1st imported file from Bank Jira
-# Report.save(current_dir+'Отчет по OS '+parser.parse(curdate).date().strftime("%d.%m.%y")+'.xlsx')  # Save report to file xxx
-curdate = '2019-08-22' 
+# OSExpired = pn.read_html(current_work_dir + 'Просрочки_1.xls')[1]  # 1st imported file from Bank Jira
+# Report.save(current_work_dir+'Отчет по OS '+parser.parse(curdate).date().strftime("%d.%m.%y")+'.xlsx')  # Save report to file xxx
+curdate = '2019-08-30'
 def main():
-    mycurdate = parser.parse(curdate).date()
+    #mycurdate = parser.parse(curdate).date()
 
-    current_dir='E:\\_proj\\Neoflex\_everyday\\'  ##Path to files
+    current_work_dir='E:\\_proj\\Neoflex\_everyday\\'  ##Path to files
+    dir_preparation(current_work_dir)
+    supporting_scripts.clear_current_report(current_work_dir,filename='Отчет по OS.xlsx')
 
-    supporting_scripts.clear_current_report(current_dir,filename='Отчет по OS.xlsx')
-
-    os_control,omni_list,alm_list=supporting_scripts.import_from_google_tables_oscontrol(mycurdate)
-    write_data_to_osreport(current_dir, os_control, omni_list, alm_list)
-
+    os_control,omni_list,alm_list=supporting_scripts.import_from_google_tables_oscontrol(curdate)
+    write_data_to_osreport(current_work_dir, os_control, omni_list, alm_list)
+    clear_dirrectory(current_work_dir)
     input()
 
-    
-def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
+
+def dir_preparation(current_work_dir):
+    ###Prepare current work dir to work in###
+    for item in os.listdir(path=current_work_dir):
+        if re.match('^Отчет по OS.*xlsx$', item) != None:
+            os.renames(current_work_dir + item, current_work_dir + 'Отчет по OS.xlsx')
+            continue
+        elif re.match('^Просрочки_1.*xls$', item) != None:
+            os.renames(current_work_dir + item, current_work_dir + 'Просрочки_1.xls')
+            continue
+        elif re.match('^Отчет по OS.*xls$', item) != None:
+            os.renames(current_work_dir + item, current_work_dir + 'Отчет по OS.xls')
+            continue
+
+
+def clear_dirrectory(current_work_dir):
+    ###Clear current work dir for next use###
+    try:
+        os.mkdir(current_work_dir + parser.parse(curdate).date().strftime("%d.%m.%y"))
+    except FileExistsError:
+        pass
+    os.replace(current_work_dir + 'Отчет по OS.xls', current_work_dir + parser.parse(curdate).date().strftime("%d.%m.%y") + '\\Отчет по OS.xls')
+    os.replace(current_work_dir + 'Просрочки_1.xls', current_work_dir + parser.parse(curdate).date().strftime("%d.%m.%y") + '\\Просрочки_1.xls')
+    copyfile(current_work_dir+'Отчет по OS '+parser.parse(curdate).date().strftime("%d.%m.%y")+'.xlsx', current_work_dir+parser.parse(curdate).date().strftime("%d.%m.%y")+'\\Отчет по OS '+parser.parse(curdate).date().strftime("%d.%m.%y")+'.xlsx')
+    os.remove(current_work_dir+'Отчет по OS.xlsx')
+
+def write_data_to_osreport(current_work_dir,os_control,omni_list,alm_list):
 
     def Count1():
         """Function to write data into a OSReport.Count1"""
-        OSReport = pn.read_html(current_dir+'Отчет по OS.xls')[1]  # pandas.core.frame.DataFrame
+        OSReport = pn.read_html(current_work_dir+'Отчет по OS.xls')[1]  # pandas.core.frame.DataFrame
         OSReport = list(OSReport.get_values())  # to list
 
         Counting1=Report['Подсчет1']
@@ -132,7 +159,7 @@ def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
 
 
 
-    Report = openpyxl.load_workbook(current_dir+'Отчет по OS.xlsx')  # Our Everyday Report
+    Report = openpyxl.load_workbook(current_work_dir+'Отчет по OS.xlsx')  # Our Everyday Report
 
     Count1()#put data into Report.Count1
     table_for_count2(os_control)#..
@@ -142,7 +169,7 @@ def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
     ##Start of input Expired OSes##
 
     ##Expired Oses in 'Просрочки_1'
-    OSExpired = pn.read_html(current_dir+'Просрочки_1.xls')[1]
+    OSExpired = pn.read_html(current_work_dir+'Просрочки_1.xls')[1]
     OSExpired = list(OSExpired.get_values())
     oses_expired_probably_new_set = set()
     oses_expired_probably_new=dict()
@@ -242,7 +269,7 @@ def write_data_to_osreport(current_dir,os_control,omni_list,alm_list):
         print('В отчёт добавлены новые OS в просрочке\nНеобходимо проверить дату,выставить резолюцию по просрочке и причину\n\n') if flag else print()
     except Exception:
         print('Новые просрочки отсутствуют\n\n')
-    Report.save(current_dir+'Отчет по OS '+parser.parse(curdate).date().strftime("%d.%m.%y")+'.xlsx')
+    Report.save(current_work_dir+'Отчет по OS '+parser.parse(curdate).date().strftime("%d.%m.%y")+'.xlsx')
     ##End of input Expired OSes##
 
 
