@@ -4,10 +4,10 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from dateutil import parser
 
-def clear_current_report(current_dir,filename):
+def clear_current_report(current_work_dir,filename):
     """Очищает текущий Отчёт по ОС"""
 
-    Report = openpyxl.load_workbook(current_dir+filename)  # Our Everyday Report
+    Report = openpyxl.load_workbook(current_work_dir+filename)  # Our Everyday Report
     counting1 = Report['Подсчет1']
     index=2
     while True:
@@ -62,7 +62,7 @@ def clear_current_report(current_dir,filename):
             break
         index += 1
 
-    Report.save(current_dir+filename)  # E:\\_proj\\Neoflex\\_everyday\\Report.xlsx
+    Report.save(current_work_dir+filename)  # E:\\_proj\\Neoflex\\_everyday\\Report.xlsx
 
 
 def import_from_google_tables_oscontrol(curdate):
