@@ -10,21 +10,16 @@ from copy import copy
 # OSReport = 'Отчет по ОС.xls'  # Filename of Every day Report
 # OSExpired = pn.read_html(current_work_dir + 'Просрочки_1.xls')[1]  # 1st imported file from Bank Jira
 # Report.save(current_work_dir+'Отчет по OS '+parser.parse(curdate).date().strftime("%d.%m.%y")+'.xlsx')  # Save report to file xxx
-curdate = '2019-08-30'
-# OSExpired = pn.read_html(current_dir + 'Просрочки_1.xls')[1]  # 1st imported file from Bank Jira
-# Report.save(current_dir+'Отчет по OS '+parser.parse(curdate).date().strftime("%d.%m.%y")+'.xlsx')  # Save report to file xxx
-curdate = '2019-08-29' 
+curdate = '2019-09-03'##YYYY-MM-DD
 def main():
-    #mycurdate = parser.parse(curdate).date()
+    mycurdate = parser.parse(curdate).date()
 
 
-    current_work_dir='E:\\_proj\\Neoflex\_everyday\\'  ##Path to files
+    current_work_dir='E:\работа\_отчёты\_ежедневный\\'  ##Path to files
     dir_preparation(current_work_dir)
     supporting_scripts.clear_current_report(current_work_dir,filename='Отчет по OS.xlsx')
 
-    current_dir='E:\\работа\\_отчёты\\_ежедневный\\'  ##Path to files
-
-    os_control,omni_list,alm_list=supporting_scripts.import_from_google_tables_oscontrol(curdate)
+    os_control,omni_list,alm_list=supporting_scripts.import_from_google_tables_oscontrol(mycurdate)
     write_data_to_osreport(current_work_dir, os_control, omni_list, alm_list)
     clear_dirrectory(current_work_dir)
     input()
